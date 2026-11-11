@@ -20,6 +20,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
@@ -30,6 +32,8 @@ jobs:
           cat .deploy-source/part-*.b64 | base64 --decode > /tmp/knowledgebridge.tar.gz
           mkdir -p app
           tar -xzf /tmp/knowledgebridge.tar.gz --strip-components=1 -C app
+          # GitHub Pages project sites are served from /<repository>/.
+          sed -i "/export default defineConfig({/a\\  base: '/Pune-hackathon-/'," app/vite.config.js
           touch app/.nojekyll
       - name: Install dependencies
         working-directory: app
